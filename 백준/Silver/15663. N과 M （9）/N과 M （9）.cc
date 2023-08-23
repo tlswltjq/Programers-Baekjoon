@@ -1,41 +1,40 @@
-#include<stdio.h>
-#include<algorithm>
+#include <iostream>
+#include <algorithm>
 using namespace std;
+int n, m;
+int answer[10];
+int nums[10];
+bool chk[10000];
 
-int N,M,dab[9],num[9],chk[9];
-
-void back(int k)
-{
-	int i,j;
-	if(k>M)
-	{
-		for(j=1;j<k;j++)
-			printf("%d ",dab[j]);
-		printf("\n");
-		return ;
-	}
-	int t=-1;
-	for(i=1;i<=N;i++)
-	{
-		if(chk[i]==0 && t!=num[i])
-		{
-			chk[i]=1;
-			dab[k]=num[i];
-			t=num[i];
-			back(k+1);
-			chk[i]=0;
-		}
-	}
+void back_t(int k){
+  if (k==m){
+    for(int i = 0 ; i < m ; i++){
+      cout<<answer[i]<< " ";
+    }
+    cout<<endl;
+    return; 
+  }
+  int chk_2= -1;
+  for(int i = 0 ; i < n; i++){
+    if(!chk[i]&& nums[i]!=chk_2){
+        //이제껏 chk[nums[i]]로 검사했으나 9 7 9 1같은경우 입력받은 수를 직접적으로 인덱스로 사용할 경우 문제 발생
+        //i번째 요소를 사용했는지 체크 하도록 함
+      answer[k] = nums[i];
+      chk_2= nums[i];
+      chk[i] = true;
+      back_t(k +1);
+      chk[i] = false;
+    }
+  }
 }
-int main()
-{
-	
-	scanf("%d%d",&N,&M);
-	for(int i=1;i<=N;i++)
-		scanf("%d",&num[i]);
 
-	sort(num+1,num+N+1);
-	
-	back(1);
-	return 0;
+int main(){
+  cin>> n>>m;
+  for(int i = 0 ; i < n ; i++){
+    cin>> nums[i];
+  }
+  sort(nums, nums+n);
+  back_t(0);
+  return 0;
 }
+ 
